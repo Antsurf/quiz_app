@@ -1,0 +1,75 @@
+//- Take quiz interface with external JavaScript
+//- Vue app loaded from /js/take-quiz.js
+
+extends layout
+
+block content
+  #app
+    //- Loading state
+    .loading(v-if="loading")
+      p Loading quiz...
+    
+    //- Quiz interface
+    .quiz-container(v-else-if="quiz && !submitted")
+      .quiz-header
+        h2 {{ quiz.title }}
+        p.quiz-description {{ quiz.description }}
+        .quiz-progress
+          span Question {{ currentQuestion + 1 }} of {{ quiz.questions.length }}
+      
+      //- Current question
+      .question-display(v-if="quiz.questions[currentQuestion]")
+        .question-text
+          h3 {{ quiz.questions[currentQuestion].question_text }}
+        
+        .options-list
+          .option-item(
+            v-for="option in ['A', 'B', 'C', 'D']"
+            :key="option"
+            @click="selectAnswer(currentQuestion, option)"
+            :class="{ selected: answers[quiz.questions[currentQuestion].id] === option }"
+          )
+            .option-label {{ option }}
+            .option-text {{ getOptionText(quiz.questions[currentQuestion], option) }}
+      
+      //- Navigation buttons
+      .quiz-navigation
+        button.btn.btn-secondary(
+          @click="previousQuestion" 
+          :disabled="currentQuestion === 0"
+        ) ← Previous
+        
+        button.btn.btn-primary(
+          v-if="currentQuestion < quiz.questions.length - 1"
+          @click="nextQuestion"
+        ) Next →
+        
+        button.btn.btn-success(
+          v-else
+          @click="submitQuiz"
+          :disabled="!allQuestionsAnswered"
+        ) Submit Quiz
+    
+    //- Results display
+    .results-container(v-else-if="results")
+      .results-card
+        h2 Quiz Completed! 🎉
+        
+        .score-display
+          .score-circle
+            .score-text {{ results.score }}
+            .score-total / {{ results.totalQuestions }}
+          
+          .score-percentage {{ results.percentage }}%
+        
+        .results-details
+          p(v-if="results.percentage >= 80" class="grade excellent") Excellent! 🌟
+          p(v-else-if="results.percentage >= 60" class="grade good") Good Job! 👍
+          p(v-else class="grade needs-improvement") Keep Practicing! 💪
+        
+        .results-actions
+          a.btn.btn-primary(href="/dashboard") Back to Dashboard
+          button.btn.btn-secondary(@click="retakeQuiz") Retake Quiz
+  
+  //- Load external JavaScript
+  script(src="/js/take-quiz.js")

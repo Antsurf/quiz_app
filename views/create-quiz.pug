@@ -1,0 +1,125 @@
+//- Create quiz form with external JavaScript
+//- Vue app loaded from /js/create-quiz.js
+
+extends layout
+
+block content
+  #app
+    .form-container.large
+      h2 Create New Quiz
+      p.form-subtitle Design an interactive assessment for your students
+      
+      //- Alert message
+      .alert(v-if="alert.show" :class="'alert-' + alert.type")
+        | {{ alert.message }}
+      
+      form(@submit.prevent="handleSubmit")
+        //- Quiz basic info
+        .form-section
+          h3 Quiz Information
+          
+          .form-group
+            label(for="title") Quiz Title *
+            input#title(
+              type="text" 
+              v-model="quizData.title" 
+              required
+              placeholder="e.g., JavaScript Fundamentals Quiz"
+            )
+          
+          .form-group
+            label(for="description") Description
+            textarea#description(
+              v-model="quizData.description" 
+              rows="3"
+              placeholder="Brief description of the quiz content"
+            )
+        
+        //- Questions section
+        .form-section
+          h3 Questions
+          
+          //- Question cards
+          .question-card(v-for="(question, index) in quizData.questions" :key="index")
+            .question-header
+              h4 Question {{ index + 1 }}
+              button.btn.btn-small.btn-danger(
+                type="button" 
+                @click="removeQuestion(index)"
+                v-if="quizData.questions.length > 1"
+              ) Remove
+            
+            .form-group
+              label(:for="'question-' + index") Question Text *
+              textarea(
+                :id="'question-' + index"
+                v-model="question.question_text"
+                required
+                rows="2"
+                placeholder="Enter your question"
+              )
+            
+            .options-grid
+              .form-group
+                label(:for="'option-a-' + index") Option A *
+                input(
+                  :id="'option-a-' + index"
+                  type="text"
+                  v-model="question.option_a"
+                  required
+                  placeholder="First option"
+                )
+              
+              .form-group
+                label(:for="'option-b-' + index") Option B *
+                input(
+                  :id="'option-b-' + index"
+                  type="text"
+                  v-model="question.option_b"
+                  required
+                  placeholder="Second option"
+                )
+              
+              .form-group
+                label(:for="'option-c-' + index") Option C *
+                input(
+                  :id="'option-c-' + index"
+                  type="text"
+                  v-model="question.option_c"
+                  required
+                  placeholder="Third option"
+                )
+              
+              .form-group
+                label(:for="'option-d-' + index") Option D *
+                input(
+                  :id="'option-d-' + index"
+                  type="text"
+                  v-model="question.option_d"
+                  required
+                  placeholder="Fourth option"
+                )
+            
+            .form-group
+              label(:for="'correct-' + index") Correct Answer *
+              select(:id="'correct-' + index" v-model="question.correct_answer" required)
+                option(value="") Select correct answer
+                option(value="A") A
+                option(value="B") B
+                option(value="C") C
+                option(value="D") D
+          
+          //- Add question button
+          button.btn.btn-secondary(type="button" @click="addQuestion")
+            | ➕ Add Another Question
+        
+        //- Submit buttons
+        .form-actions
+          button.btn.btn-primary(type="submit" :disabled="loading")
+            span(v-if="!loading") Create Quiz
+            span(v-else) Creating...
+          
+          a.btn.btn-secondary(href="/dashboard") Cancel
+  
+  //- Load external JavaScript
+  script(src="/js/create-quiz.js")

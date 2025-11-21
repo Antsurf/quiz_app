@@ -1,0 +1,74 @@
+//- Dashboard with external JavaScript
+//- Vue app loaded from /js/dashboard.js
+
+extends layout
+
+block content
+  #app
+    .dashboard-header
+      h2 Welcome, {{ user.username }}!
+      p.subtitle(v-if="user.role === 'student'") Ready to test your knowledge?
+      p.subtitle(v-if="user.role === 'instructor'") Manage your quizzes and track student progress
+      
+      //- Instructor-only button
+      .actions(v-if="user.role === 'instructor' || user.role === 'admin'")
+        a.btn.btn-primary(href="/create-quiz") ➕ Create New Quiz
+    
+    //- Loading state
+    .loading(v-if="loading")
+      p Loading quizzes...
+    
+    //- Alert messages
+    .alert(v-if="alert.show" :class="'alert-' + alert.type")
+      | {{ alert.message }}
+    
+    //- Quizzes list
+    .quizzes-section(v-if="!loading")
+      h3 Available Quizzes
+      
+      //- Empty state
+      .empty-state(v-if="quizzes.length === 0")
+        p No quizzes available yet.
+        p(v-if="user.role === 'instructor'") Create your first quiz to get started!
+      
+      //- Quiz cards
+      .quiz-grid(v-else)
+        .quiz-card(v-for="quiz in quizzes" :key="quiz.id")
+          .quiz-header
+            h4 {{ quiz.title }}
+            .quiz-meta
+              span.badge {{ quiz.question_count }} questions
+          
+          p.quiz-description {{ quiz.description || 'No description provided' }}
+          
+          .quiz-footer
+            .instructor-info
+              span 👤 {{ quiz.instructor_name }}
+            
+            .quiz-actions
+              //- Students can take quiz
+              a.btn.btn-small.btn-primary(
+                v-if="user.role === 'student'" 
+                :href="'/take-quiz/' + quiz.id"
+              ) Take Quiz
+              
+              //- Instructors can edit/delete their own quizzes
+              template(v-if="user.role === 'instructor' && quiz.instructor_id === user.id")
+                button.btn.btn-small.btn-danger(@click="deleteQuiz(quiz.id)") Delete
+              
+              //- Admins can delete any quiz
+              button.btn.btn-small.btn-danger(
+                v-if="user.role === 'admin'"
+                @click="deleteQuiz(quiz.id)"
+              ) Delete
+    
+    //- Recent attempts (for students)
+    .attempts-section(v-if="user.role === 'student' && recentAttempts.length > 0")
+      h3 Your Recent Results
+      .attempts-list
+        .attempt-card(v-for="attempt in recentAttempts" :key="attempt.id")
+          p.attempt-score {{ attempt.score }}/{{ attempt.total_questions }}
+          p.attempt-date {{ formatDate(attempt.completed_at) }}
+  
+  //- Load external JavaScript
+  script(src="/js/dashboard.js")

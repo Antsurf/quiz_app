@@ -1,0 +1,86 @@
+//- Base layout template with improved navigation
+//- Fixed: Hide register/login when user is authenticated
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= title || 'Quiz App'
+    
+    //- Link to stylesheet
+    link(rel="stylesheet" href="/css/style.css")
+    
+    //- Vue.js CDN (no build tools needed)
+    script(src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js")
+    
+  body
+    //- Navigation header
+    header.navbar
+      .container
+        h1.logo 
+          a(href="/") 📚 Quiz Platform
+        
+        nav#navMenu
+          ul
+            li
+              a(href="/") Home
+            li#dashboardLink(style="display:none")
+              a(href="/dashboard") Dashboard
+            li.results
+              a(href="/results") Results 
+            li.auth-links
+              span#loginLink
+                a(href="/login") Login
+              span#registerLink
+                a(href="/register") Register
+              span#logoutLink(style="display:none")
+                a(href="#" onclick="handleLogout(event)") Logout
+
+    
+    //- Main content area
+    main.container
+      block content
+    
+    //- Footer
+    footer.footer
+      .container
+        p © 2025 Quiz Assessment Platform | Advanced Web Programming Project
+    
+    //- Client-side authentication check
+    script.
+      // Check if user is logged in and update navigation
+      function updateNavigation() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        
+        const loginLink = document.getElementById('loginLink');
+        const registerLink = document.getElementById('registerLink');
+        const logoutLink = document.getElementById('logoutLink');
+        const dashboardLink = document.getElementById('dashboardLink');
+        
+        if (token && user.id) {
+          // User is logged in - hide login/register, show logout
+          loginLink.style.display = 'none';
+          registerLink.style.display = 'none';
+          logoutLink.style.display = 'block';
+          dashboardLink.style.display = 'block';
+        } else {
+          // User is not logged in - show login/register, hide logout
+          loginLink.style.display = 'block';
+          registerLink.style.display = 'block';
+          logoutLink.style.display = 'none';
+          dashboardLink.style.display = 'none';
+        }
+      }
+      
+      // Logout functionality
+      function handleLogout(event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/';
+      }
+      
+      // Run on page load
+      updateNavigation();

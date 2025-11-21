@@ -1,0 +1,44 @@
+//- User login form with external JavaScript
+//- Vue app loaded from /js/login.js
+
+extends layout
+
+block content
+  #app
+    .form-container
+      h2 Sign In
+      p.form-subtitle Welcome back! Please login to your account.
+      
+      //- Alert message
+      .alert(v-if="alert.show" :class="'alert-' + alert.type")
+        | {{ alert.message }}
+      
+      form(@submit.prevent="handleLogin")
+        .form-group
+          label(for="email") Email Address
+          input#email(
+            type="email" 
+            v-model="formData.email" 
+            required
+            placeholder="your.email@example.com"
+          )
+        
+        .form-group
+          label(for="password") Password
+          input#password(
+            type="password" 
+            v-model="formData.password" 
+            required
+            placeholder="Enter your password"
+          )
+        
+        button.btn.btn-primary(type="submit" :disabled="loading")
+          span(v-if="!loading") Login
+          span(v-else) Signing In...
+      
+      .form-footer
+        p Don't have an account? 
+          a(href="/register") Register here
+  
+  //- Load external JavaScript
+  script(src="/js/login.js")

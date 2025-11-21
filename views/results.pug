@@ -1,0 +1,49 @@
+//- Display quiz results history for students
+//- Shows all past quiz attempts with scores
+
+extends layout
+
+block content
+  #app
+    .results-page
+      h2 Your Quiz Results
+      p.subtitle View your quiz history and performance
+      
+      //- Loading state
+      .loading(v-if="loading")
+        p Loading results...
+      
+      //- Alert messages
+      .alert(v-if="alert.show" :class="'alert-' + alert.type")
+        | {{ alert.message }}
+      
+      //- Results list
+      .results-container(v-if="!loading")
+        //- Empty state
+        .empty-state(v-if="attempts.length === 0")
+          p No quiz attempts yet.
+          p 
+            a(href="/dashboard") Go to Dashboard
+            |  to take a quiz!
+        
+        //- Results cards
+        .results-grid(v-else)
+          .result-card(v-for="attempt in attempts" :key="attempt.id")
+            .result-header
+              h3 {{ attempt.quiz_title || 'Quiz #' + attempt.quiz_id }}
+              .result-date {{ formatDate(attempt.completed_at) }}
+            
+            .result-score
+              .score-circle(:class="getScoreClass(attempt)")
+                .score-text {{ attempt.score }}
+                .score-total / {{ attempt.total_questions }}
+              
+              .score-details
+                p.percentage {{ calculatePercentage(attempt) }}%
+                p.grade(:class="getGradeClass(attempt)") {{ getGrade(attempt) }}
+            
+            .result-actions
+              a.btn.btn-small.btn-primary(:href="'/take-quiz/' + attempt.quiz_id") Retake Quiz
+  
+  //- Load external JavaScript
+  script(src="/js/results.js")

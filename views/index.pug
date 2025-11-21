@@ -1,0 +1,152 @@
+//- Landing page that adapts based on authentication status
+//- Shows welcome page for guests, user profile for authenticated users
+
+extends layout
+
+block content
+  #app
+    //- Guest view (not logged in)
+    .guest-view(v-if="!isAuthenticated")
+      .hero
+        h1 {{ message }}
+        p.subtitle Engage and Evaluate Your Knowledge with Interactive Assessments
+        
+        .hero-buttons
+          a.btn.btn-primary(href="/register") Get Started
+          a.btn.btn-secondary(href="/login") Sign In
+      
+      .features
+        h2.section-title Key Features
+        
+        .feature-grid
+          .feature-card
+            .icon 📝
+            h3 Interactive Quizzes
+            p Create and take engaging quizzes with multiple-choice questions
+          
+          .feature-card
+            .icon 📊
+            h3 Instant Results
+            p Get immediate feedback on your quiz performance
+          
+          .feature-card
+            .icon 👥
+            h3 User Roles
+            p Distinct features for students, instructors, and administrators
+          
+          .feature-card
+            .icon 🎯
+            h3 Skill Assessment
+            p Evaluate expertise in various subjects and topics
+      
+      .cta-section
+        h2 Ready to Start Learning?
+        p Join thousands of users improving their knowledge
+        a.btn.btn-large(href="/register") Create Free Account
+    
+    //- Authenticated user view
+    .auth-view(v-else)
+      //- User profile card
+      .profile-section
+        .profile-card
+          .profile-header
+            .profile-avatar {{ getUserInitials() }}
+            .profile-info
+              h2 {{ user.username }}
+              p.user-email {{ user.email }}
+              span.role-badge(:class="'role-' + user.role") {{ formatRole(user.role) }}
+          
+          .profile-stats
+            .stat-card
+              .stat-icon 📝
+              .stat-info
+                .stat-value {{ stats.totalAttempts }}
+                .stat-label Quizzes Taken
+            
+            .stat-card(v-if="user.role === 'instructor' || user.role === 'admin'")
+              .stat-icon 📚
+              .stat-info
+                .stat-value {{ stats.quizzesCreated }}
+                .stat-label Quizzes Created
+            
+            .stat-card
+              .stat-icon 📊
+              .stat-info
+                .stat-value {{ stats.averageScore }}%
+                .stat-label Average Score
+            
+            .stat-card
+              .stat-icon 🏆
+              .stat-info
+                .stat-value {{ stats.highestScore }}%
+                .stat-label Best Score
+      
+      //- Recent activity
+      .activity-section
+        h3 Recent Activity
+        
+        //- Loading state
+        .loading(v-if="loading")
+          p Loading your activity...
+        
+        //- No activity yet
+        .empty-state(v-else-if="recentAttempts.length === 0 && user.role === 'student'")
+          p No quiz attempts yet.
+          p 
+            a(href="/dashboard") Go to Dashboard
+            |  to start taking quizzes!
+        
+        .empty-state(v-else-if="recentQuizzes.length === 0 && (user.role === 'instructor' || user.role === 'admin')")
+          p No quizzes created yet.
+          p 
+            a(href="/create-quiz") Create your first quiz
+            |  to get started!
+        
+        //- Recent quiz attempts (for students)
+        .attempts-grid(v-if="user.role === 'student' && recentAttempts.length > 0")
+          .attempt-card(v-for="attempt in recentAttempts" :key="attempt.id")
+            .attempt-header
+              h4 {{ attempt.quiz_title }}
+              .attempt-date {{ formatDate(attempt.completed_at) }}
+            
+            .attempt-score
+              .score-badge(:class="getScoreClass(attempt)")
+                | {{ attempt.score }}/{{ attempt.total_questions }}
+              
+              .score-details
+                .percentage {{ calculatePercentage(attempt) }}%
+                .grade(:class="getGradeClass(attempt)") {{ getGrade(attempt) }}
+            
+            a.btn.btn-small.btn-primary(:href="'/take-quiz/' + attempt.quiz_id") Retake
+        
+        //- Recent created quizzes (for instructors)
+        .quizzes-grid(v-if="(user.role === 'instructor' || user.role === 'admin') && recentQuizzes.length > 0")
+          .quiz-card(v-for="quiz in recentQuizzes" :key="quiz.id")
+            .quiz-header
+              h4 {{ quiz.title }}
+              span.badge {{ quiz.question_count }} questions
+            
+            p.quiz-description {{ quiz.description || 'No description' }}
+            
+            .quiz-footer
+              .quiz-date Created {{ formatDate(quiz.created_at) }}
+              a.btn.btn-small.btn-primary(href="/dashboard") Manage
+      
+      //- Quick actions
+      .actions-section
+        h3 Quick Actions
+        .actions-grid
+          a.action-card(href="/dashboard")
+            .action-icon 📊
+            .action-text View All Quizzes
+          
+          a.action-card(v-if="user.role === 'instructor' || user.role === 'admin'" href="/create-quiz")
+            .action-icon ➕
+            .action-text Create New Quiz
+          
+          a.action-card(v-if="user.role === 'student'" href="/results")
+            .action-icon 📈
+            .action-text View All Results
+  
+  //- Load external JavaScript
+  script(src="/js/home.js")

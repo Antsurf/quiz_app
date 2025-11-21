@@ -1,0 +1,61 @@
+//- User registration form with external JavaScript
+//- Vue app loaded from /js/register.js
+
+extends layout
+
+block content
+  #app
+    .form-container
+      h2 Create Your Account
+      p.form-subtitle Join the Quiz Platform today
+      
+      //- Alert message
+      .alert(v-if="alert.show" :class="'alert-' + alert.type")
+        | {{ alert.message }}
+      
+      form(@submit.prevent="handleRegister")
+        .form-group
+          label(for="username") Username
+          input#username(
+            type="text" 
+            v-model="formData.username" 
+            required
+            placeholder="Enter your username"
+          )
+        
+        .form-group
+          label(for="email") Email Address
+          input#email(
+            type="email" 
+            v-model="formData.email" 
+            required
+            placeholder="your.email@example.com"
+          )
+        
+        .form-group
+          label(for="password") Password
+          input#password(
+            type="password" 
+            v-model="formData.password" 
+            required
+            minlength="6"
+            placeholder="At least 6 characters"
+          )
+        
+        .form-group
+          label(for="role") I am a:
+          select#role(v-model="formData.role" required)
+            option(value="student") Student
+            option(value="instructor") Instructor
+            option(value="admin") Administrator 
+        
+        button.btn.btn-primary(type="submit" :disabled="loading")
+          span(v-if="!loading") Register
+          span(v-else) Creating Account...
+      
+      .form-footer
+        p Already have an account? 
+          a(href="/login") Sign in here
+  
+  //- Load external JavaScript
+  script(src="/js/register.js")
