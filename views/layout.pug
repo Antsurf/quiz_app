@@ -58,13 +58,22 @@ html(lang="en")
         const registerLink = document.getElementById('registerLink');
         const logoutLink = document.getElementById('logoutLink');
         const dashboardLink = document.getElementById('dashboardLink');
-        
+        const resultLink = document.querySelector('.results');
+    
+
         if (token && user.id) {
           // User is logged in - hide login/register, show logout
           loginLink.style.display = 'none';
           registerLink.style.display = 'none';
           logoutLink.style.display = 'block';
           dashboardLink.style.display = 'block';
+
+          // For the moment, hide result (may modify for it to become a page 
+          // with result for all student ? or do it in dashboard instantly)
+          if(user.role === "admin" ||user.role ==="instructor"){
+            resultLink.style.display = 'none';
+          }
+      
         } else {
           // User is not logged in - show login/register, hide logout
           loginLink.style.display = 'block';
