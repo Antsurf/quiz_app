@@ -117,7 +117,7 @@ CREATE TABLE quiz_attempts (
     total_questions INT NOT NULL,
     completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
 );
 ```
 
@@ -143,7 +143,7 @@ npm install --save-dev nodemon
 Edit `config/db.js` and update MySQL credentials:
 
 ```javascript
-const db = mysql.createPool({
+const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',              // Your MySQL username
     password: '',              // Your MySQL password

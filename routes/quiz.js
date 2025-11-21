@@ -264,6 +264,7 @@ router.delete('/:id', verifyToken, checkRole(['instructor', 'admin']), (req, res
         const quiz = results[0];
 
         // Only allow deletion if user is admin or quiz creator
+        
         if (userRole !== 'admin' && quiz.instructor_id !== userId) {
             return res.status(403).json({ 
                 success: false, 
