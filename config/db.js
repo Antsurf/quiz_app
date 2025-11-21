@@ -1,6 +1,5 @@
 // config/db.js
 // This file manages the MySQL database connection
-// Based on slides 12NODE~1.PDF (Node.js Express: User Management System)
 
 const mysql = require('mysql2');
 
