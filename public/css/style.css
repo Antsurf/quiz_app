@@ -45,6 +45,7 @@ main {
   color: white;
   padding: 1rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .navbar .container {
@@ -789,6 +790,40 @@ main {
   justify-content: center;
   margin-top: 2rem;
   flex-wrap: wrap;
+}
+
+/* ==================== */
+/*      QUIZ LOGS       */
+/* ==================== */
+
+
+
+#link-back{
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  font-size: 2em;
+  color: #34495e;
+}
+
+#link-back:hover{
+  color: #3498db;
+}
+
+#big-title{
+  margin-top: 50px;
+  text-align: center;
+}
+
+#quiz-attemps-container{
+  padding: 0.5rem 1rem; 
+
+  border-radius: 5px;
+  border: 1px solid rgb(169, 169, 169);
+}
+
+#quiz-attemps-container th{
+  padding: 0 1rem;
 }
 
 /* ==================== */

@@ -2,13 +2,29 @@ extends layout
 
 block content 
     #app
-        a(href="/dashboard") back
-        h1 {{quiztitle}}
+        a#link-back(href="/dashboard") 
+            i(class="fa-solid fa-arrow-left")
 
-        .test(v-for="attempt in quizAttemps" :key="attempt.id")
-            p {{attempt.student_username}} : {{attempt.score * 100}}% at {{formatDate(attempt.completed_at)}}
+        h1#big-title Test : {{quiztitle}}
+
+        
+            
+        table#quiz-attemps-container
+            tr 
+                th Username
+                th score 
+                th time
+            div
+            tr(v-for="attempt in quizAttemps" :key="attempt.id")
+                th 
+                    p {{attempt.student_username}}
+                th    
+                    p {{attempt.score * 100}}%
+                th
+                    p {{formatDate(attempt.completed_at)}}
 
 
 
     //- Load external JavaScript
     script(src="/js/quiz-logs.js")
+    script(src="https://kit.fontawesome.com/d14f3eb953.js" crossorigin="anonymous")
