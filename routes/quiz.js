@@ -22,15 +22,15 @@ router.get('/', verifyToken, (req, res) => {
     db.query(query, (err, results) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error fetching quizzes' 
+            return res.status(500).json({
+                success: false,
+                message: 'Error fetching quizzes'
             });
         }
 
-        res.json({ 
-            success: true, 
-            quizzes: results 
+        res.json({
+            success: true,
+            quizzes: results
         });
     });
 });
@@ -51,16 +51,16 @@ router.get('/:id', verifyToken, (req, res) => {
     db.query(quizQuery, [quizId], (err, quizResults) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error fetching quiz' 
+            return res.status(500).json({
+                success: false,
+                message: 'Error fetching quiz'
             });
         }
 
         if (quizResults.length === 0) {
-            return res.status(404).json({ 
-                success: false, 
-                message: 'Quiz not found' 
+            return res.status(404).json({
+                success: false,
+                message: 'Quiz not found'
             });
         }
 
@@ -69,18 +69,18 @@ router.get('/:id', verifyToken, (req, res) => {
         db.query(questionsQuery, [quizId], (qErr, questions) => {
             if (qErr) {
                 console.error('Database error:', qErr);
-                return res.status(500).json({ 
-                    success: false, 
-                    message: 'Error fetching questions' 
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error fetching questions'
                 });
             }
 
             const quiz = quizResults[0];
             quiz.questions = questions;
 
-            res.json({ 
-                success: true, 
-                quiz: quiz 
+            res.json({
+                success: true,
+                quiz: quiz
             });
         });
     });
@@ -94,21 +94,21 @@ router.post('/', verifyToken, checkRole(['instructor', 'admin']), (req, res) => 
 
     // Validate input
     if (!title || !questions || questions.length === 0) {
-        return res.status(400).json({ 
-            success: false, 
-            message: 'Title and at least one question are required' 
+        return res.status(400).json({
+            success: false,
+            message: 'Title and at least one question are required'
         });
     }
 
     // Insert quiz
     const insertQuizQuery = 'INSERT INTO quizzes (title, description, instructor_id) VALUES (?, ?, ?)';
-    
+
     db.query(insertQuizQuery, [title, description, instructorId], (err, result) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error creating quiz' 
+            return res.status(500).json({
+                success: false,
+                message: 'Error creating quiz'
             });
         }
 
@@ -124,15 +124,15 @@ router.post('/', verifyToken, checkRole(['instructor', 'admin']), (req, res) => 
         let hasError = false;
 
         questions.forEach(q => {
-            db.query(insertQuestionQuery, 
+            db.query(insertQuestionQuery,
                 [quizId, q.question_text, q.option_a, q.option_b, q.option_c, q.option_d, q.correct_answer],
                 (qErr) => {
                     if (qErr && !hasError) {
                         hasError = true;
                         console.error('Question insert error:', qErr);
-                        return res.status(500).json({ 
-                            success: false, 
-                            message: 'Error adding questions' 
+                        return res.status(500).json({
+                            success: false,
+                            message: 'Error adding questions'
                         });
                     }
 
@@ -140,8 +140,8 @@ router.post('/', verifyToken, checkRole(['instructor', 'admin']), (req, res) => 
 
                     // All questions inserted successfully
                     if (completed === questions.length && !hasError) {
-                        res.status(201).json({ 
-                            success: true, 
+                        res.status(201).json({
+                            success: true,
                             message: 'Quiz created successfully',
                             quizId: quizId
                         });
@@ -161,13 +161,13 @@ router.post('/:id/submit', verifyToken, (req, res) => {
 
     // Get all questions with correct answers
     const query = 'SELECT id, correct_answer FROM questions WHERE quiz_id = ?';
-    
+
     db.query(query, [quizId], (err, questions) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error processing submission' 
+            return res.status(500).json({
+                success: false,
+                message: 'Error processing submission'
             });
         }
 
@@ -191,13 +191,13 @@ router.post('/:id/submit', verifyToken, (req, res) => {
         db.query(insertQuery, [userId, quizId, score, totalQuestions], (insertErr) => {
             if (insertErr) {
                 console.error('Database error:', insertErr);
-                return res.status(500).json({ 
-                    success: false, 
-                    message: 'Error saving results' 
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error saving results'
                 });
             }
 
-            res.json({ 
+            res.json({
                 success: true,
                 score: score,
                 totalQuestions: totalQuestions,
@@ -222,15 +222,15 @@ router.get('/:id/results', verifyToken, (req, res) => {
     db.query(query, [quizId, userId], (err, results) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error fetching results' 
+            return res.status(500).json({
+                success: false,
+                message: 'Error fetching results'
             });
         }
 
-        res.json({ 
-            success: true, 
-            attempts: results 
+        res.json({
+            success: true,
+            attempts: results
         });
     });
 });
@@ -244,49 +244,49 @@ router.delete('/:id', verifyToken, checkRole(['instructor', 'admin']), (req, res
 
     // Check if quiz belongs to user (unless admin)
     const checkQuery = 'SELECT instructor_id FROM quizzes WHERE id = ?';
-    
+
     db.query(checkQuery, [quizId], (err, results) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error checking quiz ownership' 
+            return res.status(500).json({
+                success: false,
+                message: 'Error checking quiz ownership'
             });
         }
 
         if (results.length === 0) {
-            return res.status(404).json({ 
-                success: false, 
-                message: 'Quiz not found' 
+            return res.status(404).json({
+                success: false,
+                message: 'Quiz not found'
             });
         }
 
         const quiz = results[0];
 
         // Only allow deletion if user is admin or quiz creator
-        
+
         if (userRole !== 'admin' && quiz.instructor_id !== userId) {
-            return res.status(403).json({ 
-                success: false, 
-                message: 'You can only delete your own quizzes' 
+            return res.status(403).json({
+                success: false,
+                message: 'You can only delete your own quizzes'
             });
         }
 
         // Delete quiz (questions will be deleted automatically due to CASCADE)
         const deleteQuery = 'DELETE FROM quizzes WHERE id = ?';
-        
+
         db.query(deleteQuery, [quizId], (delErr) => {
             if (delErr) {
                 console.error('Database error:', delErr);
-                return res.status(500).json({ 
-                    success: false, 
-                    message: 'Error deleting quiz' 
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error deleting quiz'
                 });
             }
 
-            res.json({ 
-                success: true, 
-                message: 'Quiz deleted successfully' 
+            res.json({
+                success: true,
+                message: 'Quiz deleted successfully'
             });
         });
     });
@@ -308,17 +308,98 @@ router.get('/attempts/user', verifyToken, (req, res) => {
     db.query(query, [userId], (err, results) => {
         if (err) {
             console.error('Database error:', err);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error fetching attempts' 
+            return res.status(500).json({
+                success: false,
+                message: 'Error fetching attempts'
             });
         }
 
-        res.json({ 
-            success: true, 
-            attempts: results 
+        res.json({
+            success: true,
+            attempts: results
         });
     });
 });
+
+// GET /api/quizzes/attempts/:id
+// Get all quiz attempts for a precise quiz
+router.get('/attempts/:id', verifyToken, checkRole(['instructor', 'admin']), (req, res) => {
+    const quizId = req.params.id;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+
+    const checkQuery = 'SELECT instructor_id FROM quizzes WHERE id = ?'
+
+    db.query(checkQuery, [quizId], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({
+                success: false,
+                message: 'Error checking quiz ownership'
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Quiz not found'
+            });
+        }
+
+        const quiz = results[0];
+
+        if (userRole !== 'admin' && quiz.instructor_id !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: 'You can only view your own quizzes'
+            });
+        }
+
+        const getTitle = `Select title FROM quizzes WHERE id=?`;
+
+        db.query(getTitle, [quizId], (err, results) => {
+            if (err) {
+                console.log('Database error:', err);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error fetching title'
+                });
+            }
+
+            const fetchedTitle = results[0];
+
+
+            const getAttemps = `
+        SELECT qa.id, user_id, quiz_id, score, total_questions, completed_at, username as student_username  
+        FROM quiz_attempts qa 
+        JOIN users u ON qa.user_id = u.id 
+        WHERE quiz_id = ?
+        ORDER BY qa.completed_at DESC`;
+
+            db.query(getAttemps, [quizId], (err, results) => {
+                if (err) {
+                    console.error('Database error:', err);
+                    return res.status(500).json({
+                        success: false,
+                        message: 'Error fetching attempts'
+                    });
+                }
+
+                res.json({
+                    success: true,
+                    attempts: results,
+                    title: fetchedTitle.title
+                });
+
+            });
+        });
+
+    });
+
+
+
+});
+
 
 module.exports = router;

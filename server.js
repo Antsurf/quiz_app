@@ -84,6 +84,12 @@ app.get('/create-quiz', (req, res) => {
     });
 });
 
+app.get('/quiz-logs', (req, res) =>{
+    res.render('quiz-logs', {
+        title: 'logs'
+    });
+});
+
 // Take quiz page
 app.get('/take-quiz/:id', (req, res) => {
     res.render('take-quiz', { 

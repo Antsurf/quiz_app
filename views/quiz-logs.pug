@@ -1,0 +1,14 @@
+extends layout
+
+block content 
+    #app
+        a(href="/dashboard") back
+        h1 {{quiztitle}}
+
+        .test(v-for="attempt in quizAttemps" :key="attempt.id")
+            p {{attempt.student_username}} : {{attempt.score * 100}}% at {{formatDate(attempt.completed_at)}}
+
+
+
+    //- Load external JavaScript
+    script(src="/js/quiz-logs.js")

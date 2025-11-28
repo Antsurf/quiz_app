@@ -61,6 +61,9 @@ block content
                 v-if="user.role === 'admin'"
                 @click="deleteQuiz(quiz.id)"
               ) Delete
+
+              //- Let instructors and admins check the responses 
+              button(v-if="user.role === 'instructor' || user.role === 'admin'", @click="seeLogs(quiz.id)") logs 
     
     //- Recent attempts (for students)
     .attempts-section(v-if="user.role === 'student' && recentAttempts.length > 0")

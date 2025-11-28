@@ -29,12 +29,11 @@ html(lang="en")
               a(href="/dashboard") Dashboard
             li.results
               a(href="/results") Results 
-            li.auth-links
-              span#loginLink
-                a(href="/login") Login
-              span#registerLink
-                a(href="/register") Register
-              span#logoutLink(style="display:none")
+            li.auth-links#loginLink
+              a(href="/login") Login
+            li.auth-links#registerLink
+              a(href="/register") Register
+            li.auth-links#logoutLink(style="display:none")
                 a(href="#" onclick="handleLogout(event)") Logout
 
     

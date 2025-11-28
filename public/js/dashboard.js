@@ -85,6 +85,12 @@ createApp({
         this.showAlert('error', 'Failed to delete quiz');
       });
     },
+
+    seeLogs(quizId){
+      localStorage.setItem("quizId", quizId);
+      window.location.href = "/quiz-logs";
+      return;
+    },
     
     // Format date for display
     formatDate(dateString) {
