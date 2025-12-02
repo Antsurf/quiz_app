@@ -7,7 +7,10 @@ block content
 
         h1#big-title Test : {{quiztitle}}
 
-        table#quiz-attempts-container
+        .empty-state(v-if="quizAttempts.length === 0")
+            p No students took the test for the moment, you might want to remind them there is a test! 
+            
+        table#quiz-attempts-container(v-if="quizAttempts.length >= 1")
             tr 
                 th Username
                 th Score 
