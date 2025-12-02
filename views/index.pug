@@ -138,7 +138,7 @@ block content
           .quiz-card(v-for="quiz in recentQuizzes" :key="quiz.id")
             .quiz-header
               h4 {{ quiz.title }}
-              span.badge {{ quiz.question_count }} questions
+              span.badge {{ quiz.question_count }} question(s)
             
             p.quiz-description {{ quiz.description || 'No description' }}
             
