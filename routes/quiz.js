@@ -1,4 +1,5 @@
-// Handles quiz creation, retrieval, and management
+// Handles quiz creation, retrieval, and management (longest part of code because need to handle each route 
+// and handle all SQL queries)
 // Instructors can create/edit quizzes, students can view available quizzes
 
 
@@ -370,14 +371,14 @@ router.get('/attempts/:id', verifyToken, checkRole(['instructor', 'admin']), (re
             const fetchedTitle = results[0];
 
 
-            const getAttemps = `
+            const getAttempts = `
         SELECT qa.id, user_id, quiz_id, score, total_questions, completed_at, username as student_username  
         FROM quiz_attempts qa 
         JOIN users u ON qa.user_id = u.id 
         WHERE quiz_id = ?
         ORDER BY qa.completed_at DESC`;
 
-            db.query(getAttemps, [quizId], (err, results) => {
+            db.query(getAttempts, [quizId], (err, results) => {
                 if (err) {
                     console.error('Database error:', err);
                     return res.status(500).json({

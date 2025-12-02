@@ -1,5 +1,4 @@
-// Vue.js application for dashboard
-// Displays quizzes and manages quiz operations
+// Displays quizzes and manages quiz operations (linked to dashboard.pug)
 
 const { createApp } = Vue;
 

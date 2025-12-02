@@ -1,6 +1,4 @@
-// Vue.js application for viewing quiz results
-// Displays quiz history and scores
-
+// Displays quiz history and scores (linked to results.pug)
 const { createApp } = Vue;
 
 createApp({

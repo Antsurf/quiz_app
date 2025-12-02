@@ -1,4 +1,3 @@
-//- Landing page that adapts based on authentication status
 //- Shows welcome page for guests, user profile for authenticated users
 
 extends layout
@@ -7,11 +6,11 @@ block content
   #app
     //- Guest view (not logged in)
     .guest-view(v-if="!isAuthenticated")
-      .hero
+      .moto
         h1 {{ message }}
         p.subtitle Engage and Evaluate Your Knowledge with Interactive Assessments
         
-        .hero-buttons
+        .moto-buttons
           a.btn.btn-primary(href="/register") Get Started
           a.btn.btn-secondary(href="/login") Sign In
       
@@ -20,21 +19,25 @@ block content
         
         .feature-grid
           .feature-card
-            .icon 📝
+            //- icon changes based on the computer but still looks good !
+            .icon 📝 
             h3 Interactive Quizzes
             p Create and take engaging quizzes with multiple-choice questions
           
           .feature-card
+            //- icon changes based on the computer but still looks good !
             .icon 📊
             h3 Instant Results
             p Get immediate feedback on your quiz performance
           
           .feature-card
+            //- icon changes based on the computer but still looks good !
             .icon 👥
             h3 User Roles
             p Distinct features for students, instructors, and administrators
           
           .feature-card
+            //- icon changes based on the computer but still looks good !
             .icon 🎯
             h3 Skill Assessment
             p Evaluate expertise in various subjects and topics
@@ -48,34 +51,43 @@ block content
     .auth-view(v-else)
       //- User profile card
       .profile-section
+        //- class for background card
         .profile-card
+          //- flex display(container like)
           .profile-header
+            //- class for initials
             .profile-avatar {{ getUserInitials() }}
+            //- class for infos
             .profile-info
               h2 {{ user.username }}
               p.user-email {{ user.email }}
               span.role-badge(:class="'role-' + user.role") {{ formatRole(user.role) }}
           
+          
           .profile-stats
-            .stat-card
+            //-only if student can see nb quiz taken, doesnt make sense for a teacher
+            .stat-card(v-if="user.role==='student'")
               .stat-icon 📝
               .stat-info
                 .stat-value {{ stats.totalAttempts }}
                 .stat-label Quizzes Taken
             
+            //- info if instructor or admin(nb quizz created)
             .stat-card(v-if="user.role === 'instructor' || user.role === 'admin'")
               .stat-icon 📚
               .stat-info
                 .stat-value {{ stats.quizzesCreated }}
                 .stat-label Quizzes Created
             
-            .stat-card
+            //- an addition could be for teacher and admin to see the whole average score of all their tests
+            .stat-card(v-if="user.role==='student'")
               .stat-icon 📊
               .stat-info
                 .stat-value {{ stats.averageScore }}%
                 .stat-label Average Score
             
-            .stat-card
+            //- only fur students 
+            .stat-card(v-if="user.role==='student'")
               .stat-icon 🏆
               .stat-info
                 .stat-value {{ stats.highestScore }}%
@@ -89,18 +101,20 @@ block content
         .loading(v-if="loading")
           p Loading your activity...
         
-        //- No activity yet
+        //- No activity yet student
         .empty-state(v-else-if="recentAttempts.length === 0 && user.role === 'student'")
           p No quiz attempts yet.
           p 
             a(href="/dashboard") Go to Dashboard
             |  to start taking quizzes!
         
-        .empty-state(v-else-if="recentQuizzes.length === 0 && (user.role === 'instructor' || user.role === 'admin')")
+        //- No activity yet admin and instructor
+        .empty-state(v-else-if="recentQuizzes.length === 0 && (user.role === 'instructor' || user.role==='admin')")
           p No quizzes created yet.
           p 
             a(href="/create-quiz") Create your first quiz
             |  to get started!
+        
         
         //- Recent quiz attempts (for students)
         .attempts-grid(v-if="user.role === 'student' && recentAttempts.length > 0")
@@ -148,5 +162,5 @@ block content
             .action-icon 📈
             .action-text View All Results
   
-  //- Load external JavaScript
+  
   script(src="/js/home.js")

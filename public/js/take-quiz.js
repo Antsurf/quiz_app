@@ -1,5 +1,4 @@
-// Vue.js application for taking quizzes
-// Handles quiz navigation and submission
+// Handles quiz navigation and submission (linked to take-quiz.pug)
 
 const { createApp } = Vue;
 

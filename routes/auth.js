@@ -1,5 +1,4 @@
 // Handles user registration and login
-
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -19,7 +18,7 @@ router.post('/register', (req, res) => {
     // Validate input
     if (!username || !email || !password) {
         return res.status(400).json({ 
-            success: false, 
+            success: false, //might be most important variable to check for connection (everywhere in the code)
             message: 'All fields are required' 
         });
     }

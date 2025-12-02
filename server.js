@@ -1,5 +1,4 @@
 // server.js
-// Main Express.js server file
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -18,7 +17,7 @@ const PORT = 3000;
 // MIDDLEWARE SETUP
 // ======================
 
-// Enable CORS for cross-origin requests (allows frontend to communicate with backend)
+// Enable CORS for cross-origin requests (allows frontend to communicate with backend goated)
 app.use(cors());
 
 // Parse JSON request bodies
@@ -27,7 +26,6 @@ app.use(bodyParser.json());
 // Parse URL-encoded request bodies (for form submissions)
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files from 'public' directory (CSS, JS, images)
 app.use(express.static('public'));
 
 // Set Pug as the view engine for server-side rendering

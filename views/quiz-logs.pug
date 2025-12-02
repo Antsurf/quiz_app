@@ -7,15 +7,13 @@ block content
 
         h1#big-title Test : {{quiztitle}}
 
-        
-            
-        table#quiz-attemps-container
+        table#quiz-attempts-container
             tr 
                 th Username
-                th score 
-                th time
+                th Score 
+                th Time
             div
-            tr(v-for="attempt in quizAttemps" :key="attempt.id")
+            tr(v-for="attempt in quizAttempts" :key="attempt.id")
                 th 
                     p {{attempt.student_username}}
                 th    
@@ -25,6 +23,5 @@ block content
 
 
 
-    //- Load external JavaScript
     script(src="/js/quiz-logs.js")
     script(src="https://kit.fontawesome.com/d14f3eb953.js" crossorigin="anonymous")

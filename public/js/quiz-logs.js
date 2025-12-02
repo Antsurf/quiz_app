@@ -1,12 +1,14 @@
+//- Handles quiz logs (linked to quiz-logs.pug)
+
 const { createApp } = Vue;
 
-
+// mostly check for token and good quiz
 createApp({
     data() {
         return {
             user: {},
             quizId: 0,
-            quizAttemps: [],
+            quizAttempts: [],
             quiztitle: "",
             loading: true,
             alert: {
@@ -73,7 +75,7 @@ createApp({
                     this.loading = false;
 
                     if (data.success) {
-                        this.quizAttemps = data.attempts;
+                        this.quizAttempts = data.attempts;
                         this.quiztitle = data.title;
                     }
                     else {
@@ -83,7 +85,7 @@ createApp({
                 .catch(error => {
                     this.loading = false;
                     console.error('Error:', error);
-                    this.showAlert('error', 'Failed to load quiz attemps');
+                    this.showAlert('error', 'Failed to load quiz attempts');
                 })
         },
         // Format date for display

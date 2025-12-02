@@ -1,5 +1,4 @@
-// Vue.js application for quiz creation
-// Handles dynamic question management
+// Handles question management (linked to create-quiz.pug)
 
 const { createApp } = Vue;
 
@@ -37,7 +36,8 @@ createApp({
       }, 5000);
     },
     
-    // Add new question to the quiz
+    // Add new question to the quiz (see if more or less question, tryed using array
+    // way harder so FF)
     addQuestion() {
       this.quizData.questions.push({
         question_text: '',
@@ -52,6 +52,7 @@ createApp({
     // Remove question from quiz
     removeQuestion(index) {
       if (this.quizData.questions.length > 1) {
+        // splice change content of array
         this.quizData.questions.splice(index, 1);
       }
     },
@@ -61,6 +62,7 @@ createApp({
       // Validate that all questions have correct answers
       const allValid = this.quizData.questions.every(q => q.correct_answer);
       
+      // check for all questions good and completed
       if (!allValid) {
         this.showAlert('error', 'Please select correct answer for all questions');
         return;
@@ -69,11 +71,13 @@ createApp({
       this.loading = true;
       const token = localStorage.getItem('token');
       
+      // if not logged in or should not be here
       if (!token) {
         window.location.href = '/login';
         return;
       }
       
+      // post method, verified using postman (it works)
       fetch('http://localhost:3000/api/quizzes', {
         method: 'POST',
         headers: {
@@ -87,11 +91,12 @@ createApp({
         this.loading = false;
         
         if (data.success) {
-          this.showAlert('success', 'Quiz created successfully! Redirecting...');
-          
+          this.showAlert('success', 'Quiz created successfully! Redirecting to Dashboard.');
+          // confirmation + redirecting
           setTimeout(() => {
             window.location.href = '/dashboard';
           }, 2000);
+          // if problem in submission, error message
         } else {
           this.showAlert('error', data.message);
         }
@@ -114,6 +119,7 @@ createApp({
     
     const user = JSON.parse(userStr);
     
+    // if not instructor or admin nothing to do here so links back to dashboard
     if (user.role !== 'instructor' && user.role !== 'admin') {
       alert('Access denied. Only instructors can create quizzes.');
       window.location.href = '/dashboard';

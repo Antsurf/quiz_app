@@ -1,5 +1,4 @@
-//- Create quiz form with external JavaScript
-//- Vue app loaded from /js/create-quiz.js
+//- Create quiz pug 
 
 extends layout
 
@@ -14,7 +13,7 @@ block content
         | {{ alert.message }}
       
       form(@submit.prevent="handleSubmit")
-        //- Quiz basic info
+        //- Quiz basic info (title + desc)
         .form-section
           h3 Quiz Information
           
@@ -24,7 +23,7 @@ block content
               type="text" 
               v-model="quizData.title" 
               required
-              placeholder="e.g., JavaScript Fundamentals Quiz"
+              placeholder="e.g., Why is AWP the best teacher in the world ?"
             )
           
           .form-group
@@ -32,7 +31,7 @@ block content
             textarea#description(
               v-model="quizData.description" 
               rows="3"
-              placeholder="Brief description of the quiz content"
+              placeholder="Malaysia > France in Badminton"
             )
         
         //- Questions section
@@ -120,6 +119,5 @@ block content
             span(v-else) Creating...
           
           a.btn.btn-secondary(href="/dashboard") Cancel
-  
-  //- Load external JavaScript
+
   script(src="/js/create-quiz.js")

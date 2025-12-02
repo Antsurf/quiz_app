@@ -1,5 +1,4 @@
-// Vue.js application for user login
-// Handles authentication with JWT
+// Handles authentication with JWT (linked to login.pug)
 
 const { createApp } = Vue;
 
@@ -48,7 +47,7 @@ createApp({
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', JSON.stringify(data.user));
           
-          this.showAlert('success', 'Login successful! Redirecting...');
+          this.showAlert('success', 'Login successful! Welcome Back!');
           
           // Redirect to dashboard after 1 second
           setTimeout(() => {

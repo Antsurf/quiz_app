@@ -1,5 +1,5 @@
-// Vue.js application for home page
-// Shows landing page for guests, profile dashboard for authenticated users
+// Shows page for guests, profile dashboard for authenticated users (linked to index.pug)
+// Pretty much main page
 
 const { createApp } = Vue;
 
@@ -81,7 +81,7 @@ createApp({
             this.stats.highestScore = highestAttempt.toFixed(1);
           }
           
-          // Get recent 5 attempts
+          // Get recent 5 attempts (slice goated)
           this.recentAttempts = attempts.slice(0, 5);
         }
       })
@@ -123,7 +123,7 @@ createApp({
       });
     },
     
-    // Get user initials for avatar
+    // Get user initials for avatar (only for style honestly)
     getUserInitials() {
       if (!this.user.username) return '?';
       const names = this.user.username.split(' ');
@@ -144,7 +144,7 @@ createApp({
       return ((attempt.score / attempt.total_questions) * 100).toFixed(1);
     },
     
-    // Get grade based on percentage
+    // Get grade based and comment on percentage
     getGrade(attempt) {
       const percentage = this.calculatePercentage(attempt);
       if (percentage >= 80) return 'Excellent';
