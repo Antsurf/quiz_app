@@ -2,7 +2,7 @@
 
 const { createApp } = Vue;
 
-// mostly check for token and good quiz
+
 createApp({
     data() {
         return {
@@ -26,45 +26,18 @@ createApp({
                 this.alert.show = false;
             }, 5000);
         },
-        fetchQuizzes() {
-            const token = localStorage.getItem('token');
 
-            if (!token) {
-                window.location.href = '/login';
-                return;
-            }
-
-            fetch('http://localhost:3000/api/quizzes', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    this.loading = false;
-
-                    if (data.success) {
-                        this.quizzes = data.quizzes;
-                    } else {
-                        this.showAlert('error', data.message);
-                    }
-                })
-                .catch(error => {
-                    this.loading = false;
-                    console.error('Error:', error);
-                    this.showAlert('error', 'Failed to load quizzes');
-                });
-        },
-
-
+        // A function to get the different attempts of every student 
         fetchQuizInfo() {
             const token = localStorage.getItem('token');
 
+            // If the user is not connected we redirect to log in
             if (!token) {
                 window.location.href = '/login';
                 return;
             }
 
+            // Call to the server 
             fetch('http://localhost:3000/api/quizzes/attempts/' + this.quizId, {
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -74,6 +47,7 @@ createApp({
                 .then(data => {
                     this.loading = false;
 
+                    // Saving the data in the vue variables 
                     if (data.success) {
                         this.quizAttempts = data.attempts;
                         this.quiztitle = data.title;

@@ -324,12 +324,13 @@ router.get('/attempts/user', verifyToken, (req, res) => {
 
 // GET /api/quizzes/attempts/:id
 // Get all quiz attempts for a precise quiz
+// Used for the logs 
 router.get('/attempts/:id', verifyToken, checkRole(['instructor', 'admin']), (req, res) => {
     const quizId = req.params.id;
     const userId = req.user.id;
     const userRole = req.user.role;
 
-
+    // FGet the quizz
     const checkQuery = 'SELECT instructor_id FROM quizzes WHERE id = ?'
 
     db.query(checkQuery, [quizId], (err, results) => {
@@ -350,6 +351,7 @@ router.get('/attempts/:id', verifyToken, checkRole(['instructor', 'admin']), (re
 
         const quiz = results[0];
 
+        // Check ownership or admin account
         if (userRole !== 'admin' && quiz.instructor_id !== userId) {
             return res.status(403).json({
                 success: false,
@@ -357,6 +359,7 @@ router.get('/attempts/:id', verifyToken, checkRole(['instructor', 'admin']), (re
             });
         }
 
+        // We want to remember the title of the quiz
         const getTitle = `Select title FROM quizzes WHERE id=?`;
 
         db.query(getTitle, [quizId], (err, results) => {
@@ -370,7 +373,7 @@ router.get('/attempts/:id', verifyToken, checkRole(['instructor', 'admin']), (re
 
             const fetchedTitle = results[0];
 
-
+            // Get the username, score and time (plus some info) for all attempts (from the table quiz_attempts) for this quiz
             const getAttempts = `
         SELECT qa.id, user_id, quiz_id, score, total_questions, completed_at, username as student_username  
         FROM quiz_attempts qa 
@@ -387,6 +390,7 @@ router.get('/attempts/:id', verifyToken, checkRole(['instructor', 'admin']), (re
                     });
                 }
 
+                // Send back the data 
                 res.json({
                     success: true,
                     attempts: results,
