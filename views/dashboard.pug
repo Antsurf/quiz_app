@@ -59,6 +59,7 @@ block content
 
               //- Let instructors and admins check the responses 
               button.btn.btn-small.btn-logs(v-if="user.role === 'instructor' && quiz.instructor_id === user.id || user.role === 'admin'", @click="seeLogs(quiz.id)") Logs 
+              button.btn.btn-small.btn-logs(v-if="user.role === 'instructor' && quiz.instructor_id === user.id || user.role === 'admin'", @click="editQuiz(quiz.id)") Edit
     
     //- Recent attempts (for students)
     .attempts-section(v-if="user.role === 'student' && recentAttempts.length > 0")

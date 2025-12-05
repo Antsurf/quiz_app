@@ -90,6 +90,12 @@ createApp({
       window.location.href = "/quiz-logs";
       return;
     },
+
+    editQuiz(quizId){
+      localStorage.setItem("quizId", quizId);
+      window.location.href = "/edit-quiz";
+      return;
+    },
     
     // Format date for display
     formatDate(dateString) {

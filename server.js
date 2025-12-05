@@ -103,6 +103,12 @@ app.get('/results', (req, res) => {
     });
 });
 
+app.get('/edit-quiz', (req, res) =>{
+    res.render('edit-quiz', {
+        title: "edit"
+    });
+});
+
 // ======================
 // ERROR HANDLING
 // ======================

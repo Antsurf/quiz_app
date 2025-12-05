@@ -153,6 +153,127 @@ router.post('/', verifyToken, checkRole(['instructor', 'admin']), (req, res) => 
     });
 });
 
+
+// POST /api/quizzes/edit/:id
+// Edit the quiz of id :id
+router.post('/edit/:id', verifyToken, checkRole(['instructor', 'admin']), (req, res) => {
+    const { title, description, questions } = req.body;
+    const quizId = req.params.id;
+    const userRole = req.user.role;
+    const userId = req.user.id;
+
+    // Validate input
+    if (!title || !questions || questions.length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'Title and at least one question are required'
+        });
+    }
+
+    // Check this is your quizz
+    const checkQuery = 'SELECT instructor_id FROM quizzes WHERE id = ?';
+
+    db.query(checkQuery, [quizId], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({
+                success: false,
+                message: 'Error checking quiz ownership'
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Quiz not found'
+            });
+        }
+
+        const quiz = results[0];
+
+        // Only allow deletion if user is admin or quiz creator
+
+        if (userRole !== 'admin' && quiz.instructor_id !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: 'You can only edit your own quizzes'
+            });
+        }
+
+
+        // update headers 
+        const editQuery = 'UPDATE quizzes SET title = ?, description = ? WHERE id = ?'
+
+        db.query(editQuery, [title, description, quizId], (err, result) => {
+            if (err) {
+                console.error('Database error: ', err);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error editing headers'
+                });
+            }
+
+            //deliting old questions 
+            const delQuestions = 'DELETE FROM questions WHERE quiz_id = ?';
+
+            db.query(delQuestions, [quizId], (err, result) => {
+                if (err) {
+                    console.error('Database error: ', err);
+                    return res.status(500).json({
+                        success: false,
+                        message: 'Error deleting old question'
+                    });
+                }
+
+                // Insert questions
+                const insertQuestionQuery = `
+            INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, option_d, correct_answer)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+
+                let completed = 0;
+                let hasError = false;
+
+                questions.forEach(q => {
+                    db.query(insertQuestionQuery,
+                        [quizId, q.question_text, q.option_a, q.option_b, q.option_c, q.option_d, q.correct_answer],
+                        (qErr) => {
+                            if (qErr && !hasError) {
+                                hasError = true;
+                                console.error('Question insert error:', qErr);
+                                return res.status(500).json({
+                                    success: false,
+                                    message: 'Error adding questions'
+                                });
+                            }
+
+                            completed++;
+
+                            // All questions inserted successfully
+                            if (completed === questions.length && !hasError) {
+                                res.status(201).json({
+                                    success: true,
+                                    message: 'Quiz created successfully',
+                                    quizId: quizId
+                                });
+                            }
+                        }
+                    );
+                });
+
+            });
+
+
+        });
+
+    });
+
+
+});
+
+
+
+
 // POST /api/quizzes/:id/submit
 // Submit quiz answers and calculate score
 router.post('/:id/submit', verifyToken, (req, res) => {
