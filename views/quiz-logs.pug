@@ -1,0 +1,33 @@
+extends layout
+
+block content 
+    #app
+        //- Arrow back coming from the font-awesome website
+        a#link-back(href="/dashboard") 
+            i(class="fa-solid fa-arrow-left")
+
+        h1#big-title Test : {{quiztitle}}
+
+        .empty-state(v-if="quizAttempts.length === 0")
+            p No students took the test for the moment, you might want to remind them there is a test! 
+            
+        //- Display of all student who took this test
+        table#quiz-attempts-container(v-if="quizAttempts.length >= 1")
+            tr 
+                th Username
+                th Score 
+                th Time
+            div
+            tr(v-for="attempt in quizAttempts" :key="attempt.id")
+                th 
+                    p {{attempt.student_username}}
+                th    
+                    p {{attempt.score * 100}}%
+                th
+                    p {{formatDate(attempt.completed_at)}}
+
+
+
+    script(src="/js/quiz-logs.js")
+    //- Link to the font-awesome website
+    script(src="https://kit.fontawesome.com/d14f3eb953.js" crossorigin="anonymous")

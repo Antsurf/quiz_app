@@ -1,5 +1,5 @@
 //- Base layout template with improved navigation
-//- Fixed: Hide register/login when user is authenticated
+//- Fixed: Hide register/login when user is authenticated and CSS tabulation
 
 doctype html
 html(lang="en")
@@ -29,12 +29,11 @@ html(lang="en")
               a(href="/dashboard") Dashboard
             li.results
               a(href="/results") Results 
-            li.auth-links
-              span#loginLink
-                a(href="/login") Login
-              span#registerLink
-                a(href="/register") Register
-              span#logoutLink(style="display:none")
+            li.auth-links#loginLink
+              a(href="/login") Login
+            li.auth-links#registerLink
+              a(href="/register") Register
+            li.auth-links#logoutLink(style="display:none")
                 a(href="#" onclick="handleLogout(event)") Logout
 
     
@@ -45,7 +44,7 @@ html(lang="en")
     //- Footer
     footer.footer
       .container
-        p © 2025 Quiz Assessment Platform | Advanced Web Programming Project
+        a(href="https://www.linkedin.com/in/jeffery-sijore-4ab86995/") © 2025 Quiz Assessment Platform | Advanced Web Programming Project
     
     //- Client-side authentication check
     script.
@@ -54,6 +53,7 @@ html(lang="en")
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         
+        // Link to new all pages
         const loginLink = document.getElementById('loginLink');
         const registerLink = document.getElementById('registerLink');
         const logoutLink = document.getElementById('logoutLink');

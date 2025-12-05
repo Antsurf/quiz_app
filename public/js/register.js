@@ -1,5 +1,4 @@
-// Vue.js application for user registration
-// Handles form validation and API communication
+// Handles form validation and API communication (linked to register.pug)
 
 const { createApp } = Vue;
 
@@ -46,7 +45,7 @@ createApp({
         this.loading = false;
         
         if (data.success) {
-          this.showAlert('success', 'Registration successful! Redirecting to login...');
+          this.showAlert('success', 'Registration successful! You will be redirected to login page');
           
           // Redirect to login after 2 seconds
           setTimeout(() => {

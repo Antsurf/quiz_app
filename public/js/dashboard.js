@@ -1,5 +1,4 @@
-// Vue.js application for dashboard
-// Displays quizzes and manages quiz operations
+// Displays quizzes and manages quiz operations (linked to dashboard.pug)
 
 const { createApp } = Vue;
 
@@ -84,6 +83,12 @@ createApp({
         console.error('Error:', error);
         this.showAlert('error', 'Failed to delete quiz');
       });
+    },
+
+    seeLogs(quizId){
+      localStorage.setItem("quizId", quizId);
+      window.location.href = "/quiz-logs";
+      return;
     },
     
     // Format date for display

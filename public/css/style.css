@@ -1,6 +1,4 @@
-/* server/public/css/style.css */
-/* Responsive styling with natural, professional color scheme */
-/* Updated to look less AI-generated with custom design choices */
+/* ONE BIG CSS, lecturer said its ok, too struggling to do multiple*/
 
 /* ==================== */
 /* RESET & BASE STYLES */
@@ -13,7 +11,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   line-height: 1.6;
   color: #2c3e50;
   background-color: #ecf0f1;
@@ -34,6 +32,8 @@ main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  text-decoration:none;
+  
 }
 
 /* ==================== */
@@ -45,6 +45,7 @@ main {
   color: white;
   padding: 1rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .navbar .container {
@@ -68,6 +69,7 @@ main {
   flex-wrap: wrap;
 }
 
+
 .navbar nav a {
   color: #ecf0f1;
   text-decoration: none;
@@ -79,10 +81,10 @@ main {
 }
 
 /* ==================== */
-/* HERO SECTION */
+/* Moto SECTION */
 /* ==================== */
 
-.hero {
+.moto {
   text-align: center;
   padding: 4rem 2rem;
   background: #34495e;
@@ -91,18 +93,18 @@ main {
   margin: 2rem 0;
 }
 
-.hero h1 {
+.moto h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
-.hero .subtitle {
+.moto .subtitle {
   font-size: 1.2rem;
   margin-bottom: 2rem;
   opacity: 0.9;
 }
 
-.hero-buttons {
+.moto-buttons {
   display: flex;
   gap: 1rem;
   justify-content: center;
@@ -163,6 +165,7 @@ main {
   background-color: #c0392b;
 }
 
+
 .btn-small {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
@@ -176,6 +179,10 @@ main {
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.btn-logs:hover{
+  background-color: #e1e1e1;
 }
 
 /* ==================== */
@@ -791,11 +798,45 @@ main {
 }
 
 /* ==================== */
+/*      QUIZ LOGS       */
+/* ==================== */
+
+
+
+#link-back{
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  font-size: 2em;
+  color: #34495e;
+}
+
+#link-back:hover{
+  color: #3498db;
+}
+
+#big-title{
+  margin-top: 50px;
+  text-align: center;
+}
+
+#quiz-attempts-container{
+  background-color: white;
+  padding: 0.5rem 1rem; 
+
+  border-radius: 5px;
+}
+
+#quiz-attempts-container th{
+  padding: 0 1rem;
+}
+
+/* ==================== */
 /* HOME PAGE - PROFILE */
 /* ==================== */
 
 .guest-view {
-  /* Styles already defined above for hero, features, cta */
+  /* Styles already defined above for moto, features, cta */
 }
 
 .auth-view {
@@ -1100,8 +1141,14 @@ main {
   background-color: #2c3e50;
   color: white;
   text-align: center;
+  text-decoration: none;
   padding: 2rem 0;
   margin-top: 3rem;
+}
+
+.footer a{
+  color:white;
+  text-decoration: none;
 }
 
 /* ==================== */
@@ -1110,7 +1157,7 @@ main {
 
 /* Tablet */
 @media (max-width: 768px) {
-  .hero h1 {
+  .moto h1 {
     font-size: 2rem;
   }
   
@@ -1169,15 +1216,15 @@ main {
 
 /* Mobile */
 @media (max-width: 480px) {
-  .hero {
+  .moto {
     padding: 2rem 1rem;
   }
   
-  .hero h1 {
+  .moto h1 {
     font-size: 1.5rem;
   }
   
-  .hero .subtitle {
+  .moto .subtitle {
     font-size: 1rem;
   }
   
