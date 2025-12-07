@@ -2,6 +2,7 @@ extends layout
 
 block content 
     #app
+        //- Arrow back coming from the font-awesome website
         a#link-back(href="/dashboard") 
             i(class="fa-solid fa-arrow-left")
 
@@ -10,6 +11,7 @@ block content
         .empty-state(v-if="quizAttempts.length === 0")
             p No students took the test for the moment, you might want to remind them there is a test! 
             
+        //- Display of all student who took this test
         table#quiz-attempts-container(v-if="quizAttempts.length >= 1")
             tr 
                 th Username
@@ -28,4 +30,5 @@ block content
 
 
     script(src="/js/quiz-logs.js")
+    //- Link to the font-awesome website
     script(src="https://kit.fontawesome.com/d14f3eb953.js" crossorigin="anonymous")
