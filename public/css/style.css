@@ -820,16 +820,24 @@ main {
   text-align: center;
 }
 
+table{
+  margin:2rem;
+}
+
 #quiz-attempts-container{
   background-color: white;
   padding: 0.5rem 1rem; 
-
   border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 #quiz-attempts-container th{
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
+
+
+
 
 /* ==================== */
 /* HOME PAGE - PROFILE */
