@@ -120,12 +120,15 @@ CREATE TABLE quiz_attempts (
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
 );
 
--- Insert sample users (need at least one instructor for the quizzes table)
-INSERT INTO users (username, email, password, role) VALUES
-('john_student', 'john@example.com', 'hashed_password_123', 'student'),
-('jane_instructor', 'jane@example.com', 'hashed_password_456', 'instructor'),
-('admin_user', 'admin@example.com', 'hashed_password_789', 'admin');
+-- Insert sample users with properly hashed passwords
+-- Password for john_student: student123
+-- Password for jane_instructor: instructor123
+-- Password for admin_user: admin123
 
+INSERT INTO users (username, email, password, role) VALUES
+('john_student', 'john@example.com', '$2b$10$l9F6AGEnlIPMMIWBRu.nBOsfnIBuSvpWvjwIGgPSXzofAAc9qIzsa', 'student'),
+('jane_instructor', 'jane@example.com', '$2b$10$3uVj7OfPEMd0y.YOdEDeie4JJCjbgwZTWNu2lcv71Y.wotzCWKU1y', 'instructor'),
+('admin_user', 'admin@example.com', '$2b$10$LgEZBzssxBIqu14zP8zWZe.tv5km9Z7XExEbh9gm9uRO6Od7qnSbW', 'admin');
 -- Insert a sample quiz (uses instructor_id = 2, which is jane_instructor)
 INSERT INTO quizzes (title, description, instructor_id) VALUES
 ('Introduction to SQL', 'A beginner-friendly quiz covering basic SQL concepts', 2);
