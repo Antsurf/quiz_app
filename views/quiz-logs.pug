@@ -22,7 +22,7 @@ block content
                 th 
                     p {{attempt.student_username}}
                 th    
-                    p {{attempt.score * 100}}%
+                    p {{(attempt.score/ attempt.total_questions) *100}}%
                 th
                     p {{formatDate(attempt.completed_at)}}
 
