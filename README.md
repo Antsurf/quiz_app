@@ -119,6 +119,25 @@ CREATE TABLE quiz_attempts (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
 );
+
+-- Insert sample users (need at least one instructor for the quizzes table)
+INSERT INTO users (username, email, password, role) VALUES
+('john_student', 'john@example.com', 'hashed_password_123', 'student'),
+('jane_instructor', 'jane@example.com', 'hashed_password_456', 'instructor'),
+('admin_user', 'admin@example.com', 'hashed_password_789', 'admin');
+
+-- Insert a sample quiz (uses instructor_id = 2, which is jane_instructor)
+INSERT INTO quizzes (title, description, instructor_id) VALUES
+('Introduction to SQL', 'A beginner-friendly quiz covering basic SQL concepts', 2);
+
+-- Insert sample questions for the quiz (quiz_id = 1)
+INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, option_d, correct_answer) VALUES
+(1, 'What does SQL stand for?', 'Structured Query Language', 'Simple Question Language', 'System Query Logic', 'Standard Queue List', 'A'),
+(1, 'Which command is used to retrieve data from a database?', 'GET', 'SELECT', 'RETRIEVE', 'FETCH', 'B');
+
+-- Insert a sample quiz attempt (user_id = 1 takes quiz_id = 1)
+INSERT INTO quiz_attempts (user_id, quiz_id, score, total_questions) VALUES
+(1, 1, 2, 2);
 ```
 
 ### Step 2: Project Installation
